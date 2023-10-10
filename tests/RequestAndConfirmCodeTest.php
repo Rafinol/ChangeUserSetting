@@ -10,8 +10,9 @@ use App\Entity\User;
 use App\Logger\Logger;
 use App\Repository\UserCodesRepository;
 use App\Repository\UserConfigRepository;
+use App\Services\CodeGeneratorService\CodeGenerator;
 use App\Services\CodeGeneratorService\CodeGeneratorService;
-use App\Services\ConfirmationService\ConfirmByCode\ConfirmationByCode;
+use App\Services\ConfirmationService\ConfirmationByCode;
 use App\Services\UserSettingService\ChangeService;
 use App\UseCase\UserSetting\ChangeUserConfigByCode;
 use App\UseCase\UserSetting\ConfirmDto;
@@ -28,10 +29,9 @@ class RequestAndConfirmCodeTest extends TestCase
     public function test_should_make_request_by_telegram_and_check_confirm()
     {
         $this->getConfirmationByTransportType(TransportType::Telegram);
-
         $this->assertEquals(
-            Logger::getLastMessages()[0],
-            'Notification by Telegram. Message to ' . self::TELEGRAM_NICK . '. Context: Ваш код подтверждения : ' . self::CODE . '\n'
+            'Notification by Telegram. Message to ' . self::TELEGRAM_NICK . '. Context: Ваш код подтверждения : ' . self::CODE,
+            trim(Logger::getLastMessages()[0])
         );
     }
 
@@ -40,8 +40,8 @@ class RequestAndConfirmCodeTest extends TestCase
         $this->getConfirmationByTransportType(TransportType::Email);
 
         $this->assertEquals(
-            Logger::getLastMessages()[0],
-            'Notification by Email. Message to ' . self::EMAIL_NICK . '. Context: Ваш код подтверждения : ' . self::CODE . '\n'
+            'Notification by Email. Message to ' . self::EMAIL_NICK . '. Context: Ваш код подтверждения : ' . self::CODE,
+            trim(Logger::getLastMessages()[0])
         );
     }
 
@@ -55,8 +55,9 @@ class RequestAndConfirmCodeTest extends TestCase
             ->method('getCodeByUserIdByConfigId')
             ->willReturn(self::CODE);
 
-        $this
-            ->createMock(CodeGeneratorService::class)
+        $codeGenerator = $this->createMock(CodeGenerator::class);
+
+        $codeGenerator
             ->expects(self::any())
             ->method('generate')
             ->willReturn(self::CODE);
@@ -65,7 +66,7 @@ class RequestAndConfirmCodeTest extends TestCase
         $transport = (new TransportFactory())->run($transportType);
         $changeService = new ChangeService($userConfigRepository);
 
-        $confirmation = new ConfirmationByCode($transport, $changeService, $userCodesRepository);
+        $confirmation = new ConfirmationByCode($transport, $changeService, $userCodesRepository, $codeGenerator);
 
         $service = new ChangeUserConfigByCode($confirmation);
 

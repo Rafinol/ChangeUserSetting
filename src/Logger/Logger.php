@@ -35,6 +35,6 @@ class Logger
 
         $file = null;
 
-        return array_slice(array_reverse($lines), $count);
+        return array_slice(array_reverse($lines), 1, $count);
     }
 }
