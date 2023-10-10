@@ -29,19 +29,29 @@ class RequestAndConfirmCodeTest extends TestCase
     public function test_should_make_request_by_telegram_and_check_confirm()
     {
         $this->getConfirmationByTransportType(TransportType::Telegram);
+        $lastLogs = Logger::getLastMessages(2);
         $this->assertEquals(
             'Notification by Telegram. Message to ' . self::TELEGRAM_NICK . '. Context: Ваш код подтверждения : ' . self::CODE,
-            trim(Logger::getLastMessages()[0])
+            trim($lastLogs[1])
+        );
+        $this->assertEquals(
+            'Confirm Successfully Telegram',
+            trim($lastLogs[0])
         );
     }
 
     public function test_should_make_request_by_email_and_check_confirm()
     {
         $this->getConfirmationByTransportType(TransportType::Email);
+        $lastLogs = Logger::getLastMessages(2);
 
         $this->assertEquals(
             'Notification by Email. Message to ' . self::EMAIL_NICK . '. Context: Ваш код подтверждения : ' . self::CODE,
-            trim(Logger::getLastMessages()[0])
+            trim($lastLogs[1])
+        );
+        $this->assertEquals(
+            'Confirm Successfully Email',
+            trim($lastLogs[0])
         );
     }
 
@@ -54,6 +64,13 @@ class RequestAndConfirmCodeTest extends TestCase
             ->expects(self::any())
             ->method('getCodeByUserIdByConfigId')
             ->willReturn(self::CODE);
+
+        $userConfigRepository
+            ->expects(self::any())
+            ->method('setConfig')
+            ->willReturnCallback(function () use ($transportType) {
+                Logger::info("Confirm Successfully " . $transportType->name);
+            });
 
         $codeGenerator = $this->createMock(CodeGenerator::class);
 

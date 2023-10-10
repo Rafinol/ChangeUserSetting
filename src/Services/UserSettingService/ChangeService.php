@@ -9,12 +9,12 @@ use App\Repository\UserConfigRepository;
 
 readonly class ChangeService implements Change
 {
-    public function __construct(private UserConfigRepository $userSettingRepository)
+    public function __construct(private UserConfigRepository $userConfigRepository)
     {
     }
 
     public function apply(int $configId, string $configValue): void
     {
-        $this->userSettingRepository->setConfig($configId, $configValue);
+        $this->userConfigRepository->setConfig($configId, $configValue);
     }
 }
