@@ -1,0 +1,8 @@
+version: '3'
+services:
+  php-cli:
+    build:
+      context: ./php
+      dockerfile: php-cli.docker
+    volumes:
+      - ./../:/var/www/html
