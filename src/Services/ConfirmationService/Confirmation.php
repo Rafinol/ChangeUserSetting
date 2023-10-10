@@ -1,10 +1,15 @@
 <?php
 
-namespace ConfirmationService;
+declare(strict_types=1);
+
+namespace App\Services\ConfirmationService;
+
+use App\Entity\Config;
+use App\Entity\User;
 
 interface Confirmation
 {
-    public function request(): void;
+    public function request(User $user, Config $config): void;
 
-    public function confirm(): void;
+    public function confirm(User $user, Config $config, array $extraData): void;
 }

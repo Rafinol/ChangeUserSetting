@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
+namespace App\Services\TransportService;
+
 use App\Logger\Logger;
-use App\Services\NotificationService\Transport;
 
 class Email implements Transport
 {
