@@ -1,0 +1,8 @@
+composer:
+	docker-compose run --rm  php-cli composer
+
+composer-install:
+	docker-compose run --rm  php-cli composer install
+
+composer-require:
+	docker-compose run --rm  php-cli composer require
