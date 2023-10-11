@@ -9,3 +9,6 @@ composer-dump:
 
 composer-require:
 	docker compose run --rm  php-cli composer require
+
+cs-fixer:
+	docker compose run --rm  php-cli ./vendor/bin/php-cs-fixer fix src

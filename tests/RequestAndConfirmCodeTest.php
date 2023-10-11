@@ -11,7 +11,6 @@ use App\Logger\Logger;
 use App\Repository\UserCodesRepository;
 use App\Repository\UserConfigRepository;
 use App\Services\CodeGeneratorService\CodeGenerator;
-use App\Services\CodeGeneratorService\CodeGeneratorService;
 use App\Services\ConfirmationService\ConfirmationByCode;
 use App\Services\UserSettingService\ChangeService;
 use App\UseCase\UserSetting\ChangeUserConfigByCode;

@@ -8,5 +8,4 @@ use Exception;
 
 class InvalidConfirmationException extends Exception
 {
-
 }

@@ -19,6 +19,7 @@
   "require-dev": {
     "roave/security-advisories": "dev-latest",
     "phpunit/phpunit": "^9.5",
-    "vimeo/psalm": "^5.15"
+    "vimeo/psalm": "^5.15",
+    "friendsofphp/php-cs-fixer": "^3.34"
   }
 }
