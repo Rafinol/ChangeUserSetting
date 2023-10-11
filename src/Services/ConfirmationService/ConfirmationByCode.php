@@ -33,7 +33,9 @@ readonly class ConfirmationByCode implements Confirmation
         $code = $this->codeGenerator->generate();
         $message = $this->getMessage($code);
         $address = (new GetRecipientAddressByTransportType())->getAddress($this->transport, $user);
+
         $this->transport->send($address, $message);
+
         $this->userCodesRepository->setCodeForUserIdAndConfigId($user->getId(), $config->getId());
     }
 
