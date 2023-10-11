@@ -6,6 +6,7 @@ use App\Entity\Config;
 use App\Entity\User;
 use App\Services\ConfirmationService\Confirmation;
 
+/** @psalm-suppress UnusedClass */
 readonly class ChangeUserConfigByCode
 {
     public function __construct(
@@ -20,6 +21,6 @@ readonly class ChangeUserConfigByCode
 
     public function confirm(User $user, Config $config, ConfirmDto $dto): void
     {
-        $this->confirmation->confirm($user, $config, (array)$dto);
+        $this->confirmation->confirm($user, $config, ['code' => $dto->code]);
     }
 }

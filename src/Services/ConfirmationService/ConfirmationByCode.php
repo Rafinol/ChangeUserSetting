@@ -10,11 +10,11 @@ use App\Exception\InvalidConfirmationException;
 use App\Exception\NotFoundTransportException;
 use App\Repository\UserCodesRepository;
 use App\Services\CodeGeneratorService\CodeGenerator;
-use App\Services\CodeGeneratorService\CodeGeneratorService;
 use App\Services\TransportService\GetRecipientAddressByTransportType;
 use App\Services\TransportService\Transport;
 use App\Services\UserSettingService\Change;
 
+/** @psalm-suppress UnusedClass */
 readonly class ConfirmationByCode implements Confirmation
 {
     public function __construct(

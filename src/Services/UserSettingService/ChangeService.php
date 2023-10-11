@@ -6,6 +6,7 @@ namespace App\Services\UserSettingService;
 
 use App\Repository\UserConfigRepository;
 
+/** @psalm-suppress UnusedClass */
 readonly class ChangeService implements Change
 {
     public function __construct(private UserConfigRepository $userConfigRepository)

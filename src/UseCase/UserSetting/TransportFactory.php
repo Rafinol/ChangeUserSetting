@@ -10,6 +10,7 @@ use App\Services\TransportService\Sms;
 use App\Services\TransportService\Telegram;
 use App\Services\TransportService\Transport;
 
+/** @psalm-suppress UnusedClass */
 class TransportFactory
 {
     public function run(TransportType $transportType): Transport

@@ -8,6 +8,7 @@ class ConfirmDto
 {
     public string $code;
 
+    /** @psalm-suppress UnusedMethod */
     public function setCode(string $code): self
     {
         $this->code = $code;

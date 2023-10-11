@@ -22,6 +22,7 @@ class Logger
         fclose($file);
     }
 
+    /** @psalm-suppress UnusedMethod */
     public static function getLastMessages(int $count = 1): array
     {
         $file = new SplFileObject(self::LOG_FILE_NAME);
@@ -32,8 +33,6 @@ class Logger
             $file->next();
             $lines[] = $file->current();
         }
-
-        $file = null;
 
         return array_slice(array_reverse($lines), 1, $count);
     }
