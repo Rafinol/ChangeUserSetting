@@ -14,7 +14,6 @@ use App\Services\CodeGeneratorService\CodeGenerator;
 use App\Services\ConfirmationService\ConfirmationByCode;
 use App\Services\UserSettingService\ChangeService;
 use App\UseCase\UserSetting\ChangeUserConfigByCode;
-use App\UseCase\UserSetting\ConfirmDto;
 use App\UseCase\UserSetting\TransportFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -27,75 +26,58 @@ class RequestAndConfirmCodeTest extends TestCase
 
     public function test_should_make_request_by_telegram_and_check_confirm()
     {
-        $this->getConfirmationByTransportType(TransportType::Telegram);
-        $lastLogs = Logger::getLastMessages(2);
-        $this->assertEquals(
-            'Notification by Telegram. Message to ' . self::TELEGRAM_NICK . '. Context: Ваш код подтверждения : ' . self::CODE,
-            trim($lastLogs[1])
-        );
-        $this->assertEquals(
-            'Confirm Successfully Telegram',
-            trim($lastLogs[0])
-        );
+        $this->requestAndConfirmByTransport(TransportType::Telegram);
+
+        [$requestLogInfo, $confirmLogInfo] = $this->getRequestAndConfirmInfoMessages();
+
+        $this->assertEquals('Telegram for ' . self::TELEGRAM_NICK . '. Code : ' . self::CODE, $requestLogInfo);
+        $this->assertEquals('Confirm Successfully Telegram', $confirmLogInfo);
     }
 
     public function test_should_make_request_by_email_and_check_confirm()
     {
-        $this->getConfirmationByTransportType(TransportType::Email);
-        $lastLogs = Logger::getLastMessages(2);
+        $this->requestAndConfirmByTransport(TransportType::Email);
 
-        $this->assertEquals(
-            'Notification by Email. Message to ' . self::EMAIL_NICK . '. Context: Ваш код подтверждения : ' . self::CODE,
-            trim($lastLogs[1])
-        );
-        $this->assertEquals(
-            'Confirm Successfully Email',
-            trim($lastLogs[0])
-        );
+        [$requestLogInfo, $confirmLogInfo] = $this->getRequestAndConfirmInfoMessages();
+
+        $this->assertEquals('Email for ' . self::EMAIL_NICK . '. Code : ' . self::CODE, $requestLogInfo);
+        $this->assertEquals('Confirm Successfully Email', $confirmLogInfo);
     }
 
-    private function getConfirmationByTransportType(TransportType $transportType): void
+    private function requestAndConfirmByTransport(TransportType $transportType): void
     {
         $userCodesRepository = $this->createMock(UserCodesRepository::class);
         $userConfigRepository = $this->createMock(UserConfigRepository::class);
-
-        $userCodesRepository
-            ->expects(self::any())
-            ->method('getCodeByUserIdByConfigId')
-            ->willReturn(self::CODE);
-
-        $userConfigRepository
-            ->expects(self::any())
-            ->method('setConfig')
-            ->willReturnCallback(function () use ($transportType) {
-                Logger::info("Confirm Successfully " . $transportType->name);
-            });
-
+        $user = $this->createMock(User::class);
+        $config = $this->createMock(Config::class);
         $codeGenerator = $this->createMock(CodeGenerator::class);
 
-        $codeGenerator
-            ->expects(self::any())
-            ->method('generate')
-            ->willReturn(self::CODE);
-
+        $this->initMockReturns(
+            $userCodesRepository,
+            $userConfigRepository,
+            $user,
+            $config,
+            $codeGenerator,
+            $transportType
+        );
 
         $transport = (new TransportFactory())->run($transportType);
         $changeService = new ChangeService($userConfigRepository);
-
         $confirmation = new ConfirmationByCode($transport, $changeService, $userCodesRepository, $codeGenerator);
-
         $service = new ChangeUserConfigByCode($confirmation);
 
-        $user = $this->createMock(User::class);
-        $config = $this->createMock(Config::class);
-        $this->mockEntities($user, $config);
-
         $service->request($user, $config);
-        $service->confirm($user, $config, (new ConfirmDto())->setCode(self::CODE));
+        $service->confirm($user, $config, self::CODE);
     }
 
-    private function mockEntities(MockObject $user, MockObject $config): void
-    {
+    private function initMockReturns(
+        MockObject $userCodesRepository,
+        MockObject $userConfigRepository,
+        MockObject $user,
+        MockObject $config,
+        MockObject $codeGenerator,
+        TransportType $transportType
+    ): void {
         $user->expects(self::any())
             ->method('getId')
             ->willReturn(1);
@@ -119,5 +101,29 @@ class RequestAndConfirmCodeTest extends TestCase
         $config->expects(self::any())
             ->method('getValue')
             ->willReturn('Согласие на обработку персональных данных');
+
+        $userCodesRepository
+            ->expects(self::any())
+            ->method('getCodeByUserIdByConfigId')
+            ->willReturn(self::CODE);
+
+        $userConfigRepository
+            ->expects(self::any())
+            ->method('setConfig')
+            ->willReturnCallback(function () use ($transportType) {
+                Logger::info("Confirm Successfully " . $transportType->name);
+            });
+
+        $codeGenerator
+            ->expects(self::any())
+            ->method('generate')
+            ->willReturn(self::CODE);
+    }
+
+    private function getRequestAndConfirmInfoMessages(): array
+    {
+        $lastLogs = Logger::getLastMessages(2);
+
+        return [trim($lastLogs[1]), trim($lastLogs[0]),];
     }
 }

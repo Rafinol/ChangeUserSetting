@@ -53,6 +53,6 @@ readonly class ConfirmationByCode implements Confirmation
 
     private function getMessage(string $code): string
     {
-        return 'Ваш код подтверждения : ' . $code;
+        return 'Code : ' . $code;
     }
 }

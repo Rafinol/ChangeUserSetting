@@ -19,8 +19,8 @@ readonly class ChangeUserConfigByCode
         $this->confirmation->request($user, $config);
     }
 
-    public function confirm(User $user, Config $config, ConfirmDto $dto): void
+    public function confirm(User $user, Config $config, string $code): void
     {
-        $this->confirmation->confirm($user, $config, ['code' => $dto->code]);
+        $this->confirmation->confirm($user, $config, ['code' => $code]);
     }
 }
