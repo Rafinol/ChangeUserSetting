@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\CodeGeneratorService;
+namespace App\Service\CodeGeneratorService;
 
 interface CodeGenerator
 {

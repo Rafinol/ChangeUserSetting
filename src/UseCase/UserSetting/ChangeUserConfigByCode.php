@@ -4,7 +4,7 @@ namespace App\UseCase\UserSetting;
 
 use App\Entity\Config;
 use App\Entity\User;
-use App\Services\ConfirmationService\Confirmation;
+use App\Service\ConfirmationService\Confirmation;
 
 /** @psalm-suppress UnusedClass */
 readonly class ChangeUserConfigByCode

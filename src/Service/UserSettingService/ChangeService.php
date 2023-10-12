@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\UserSettingService;
+namespace App\Service\UserSettingService;
 
 use App\Repository\UserConfigRepository;
 

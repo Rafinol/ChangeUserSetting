@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Services\ConfirmationService;
+namespace App\Service\ConfirmationService;
 
 use App\Entity\Config;
 use App\Entity\User;
 use App\Exception\InvalidConfirmationException;
 use App\Exception\NotFoundTransportException;
 use App\Repository\UserCodesRepository;
-use App\Services\CodeGeneratorService\CodeGenerator;
-use App\Services\TransportService\GetRecipientAddressByTransportType;
-use App\Services\TransportService\Transport;
-use App\Services\UserSettingService\Change;
+use App\Service\CodeGeneratorService\CodeGenerator;
+use App\Service\TransportService\GetRecipientAddressByTransportType;
+use App\Service\TransportService\Transport;
+use App\Service\UserSettingService\Change;
 
 /** @psalm-suppress UnusedClass */
 readonly class ConfirmationByCode implements Confirmation

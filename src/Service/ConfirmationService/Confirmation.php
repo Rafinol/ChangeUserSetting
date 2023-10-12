@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\ConfirmationService;
+namespace App\Service\ConfirmationService;
 
 use App\Entity\Config;
 use App\Entity\User;

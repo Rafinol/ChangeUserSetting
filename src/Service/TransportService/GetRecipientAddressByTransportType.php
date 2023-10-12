@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Services\TransportService;
+namespace App\Service\TransportService;
 
 use App\Entity\User;
 use App\Exception\NotFoundTransportException;

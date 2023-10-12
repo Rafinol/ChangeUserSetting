@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace App\UseCase\UserSetting;
 
 use App\Entity\TransportType;
-use App\Services\TransportService\Email;
-use App\Services\TransportService\Sms;
-use App\Services\TransportService\Telegram;
-use App\Services\TransportService\Transport;
+use App\Service\TransportService\Email;
+use App\Service\TransportService\Sms;
+use App\Service\TransportService\Telegram;
+use App\Service\TransportService\Transport;
 
 /** @psalm-suppress UnusedClass */
 class TransportFactory

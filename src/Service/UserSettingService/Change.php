@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\UserSettingService;
+namespace App\Service\UserSettingService;
 
 interface Change
 {

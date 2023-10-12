@@ -1,5 +1,5 @@
-composer:
-	docker compose run --rm  php-cli composer
+start:
+	docker compose up -d --build
 
 composer-install:
 	docker compose run --rm  php-cli composer install
@@ -7,8 +7,8 @@ composer-install:
 composer-dump:
 	docker compose run --rm  php-cli composer dump-autoload
 
-composer-require:
-	docker compose run --rm  php-cli composer require
+phpunit-tests:
+	docker compose run --rm  php-cli ./vendor/bin/phpunit tests
 
 cs-fixer:
 	docker compose run --rm  php-cli ./vendor/bin/php-cs-fixer fix src
